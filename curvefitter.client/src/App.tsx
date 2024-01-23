@@ -1,11 +1,11 @@
+import React from 'react';
 import './App.css';
-import { CurrentPlot, Layout, UserInputs, UserPlots } from './components';
+import { Layout, PlotView, UserPlots } from './components';
 
 export default function App() {
     return (
         <Layout>
-            <UserInputs />
-            <CurrentPlot />
+            <PlotView />
             <UserPlots />
         </Layout>
     )

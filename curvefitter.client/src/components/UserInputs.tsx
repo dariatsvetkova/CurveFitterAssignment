@@ -1,26 +1,24 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { CurveFitType, DataPointType } from '../models/CurveTypes';
 import { curveFitOptions } from '../utility/constants';
 
-export default function UserInputs() {
-    const [fit, setFit] = useState<CurveFitType>(curveFitOptions[0]);
-
-    const handleFitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setFit(curveFitOptions[parseInt(e.target.value)]);
-    }
-
-    const [dataPoints, setDataPoints] = useState<DataPointType[]>([]);
-
-    const handleDataPointChange = (
+interface UserInputProps {
+    fit: CurveFitType;
+    handleFitChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+    dataPoints: DataPointType[];
+    handleDataPointChange: (
         e: React.ChangeEvent<HTMLInputElement>,
         index: number
-    ) => {
-        const dataPointType = e.target.name.split('-')[0] as 'x' | 'y';
-        const newDataPoints = [...dataPoints];
+    ) => void;
+}
 
-        newDataPoints[index][dataPointType] = parseInt(e.target.value);
-        setDataPoints(newDataPoints);
-    }
+export default function UserInputs({
+    fit,
+    handleFitChange,
+    dataPoints,
+    handleDataPointChange,
+}: UserInputProps) {
+    
 
     return (
         <form>

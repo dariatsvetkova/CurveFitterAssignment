@@ -1,4 +1,4 @@
-import { CurveFitType, FitsType } from "../models/CurveTypes";
+import { CurveFitType, ServerResponseType } from "../models/CurveTypes";
 
 export const curveFitOptions: CurveFitType[] = [
     {
@@ -14,3 +14,9 @@ export const curveFitOptions: CurveFitType[] = [
         minDataPoints: 4,
     },
 ]
+
+export const defaultServerResponse: ServerResponseType = {
+    data: undefined,
+    loading: false,
+    error: false,
+}

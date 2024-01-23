@@ -13,7 +13,13 @@ export type DataPointType = {
 export type EquationType = number[];
 
 export interface CurveType {
-    equation: EquationType;
-    userDataPoints: DataPointType[];
-    fitdDataPoints: DataPointType[];
+    Equation: EquationType;
+    UserDataPoints: DataPointType[];
+    FitDataPoints: DataPointType[];
+}
+
+export interface ServerResponseType {
+    data?: CurveType;
+    loading: boolean;
+    error: boolean;
 }

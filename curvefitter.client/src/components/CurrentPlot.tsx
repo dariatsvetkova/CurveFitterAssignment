@@ -17,22 +17,13 @@ interface CurrentPlotProps {
     fitDataPoints?: DataPointType[];
 }
 
-const mockUserDataPoints = [
-    { x: 150, y: 400 },
-    { x: 110, y: 180 },
-];
-
-const mockFitDataPoints = [
-    { x: 100, y: 200 },
-    { x: 120, y: 200 },
-    { x: 140, y: 250 },
-    { x: 170, y: 300 },
-];
-
 export default function CurrentPlot({
-    userDataPoints = mockUserDataPoints,
-    fitDataPoints = mockFitDataPoints,
+    userDataPoints = [],
+    fitDataPoints = [],
 }: CurrentPlotProps) {
+    console.log('userDataPoints:', userDataPoints);
+    console.log('fitDataPoints:', fitDataPoints);
+
     return (
         <ResponsiveContainer width="100%" height={400}>
             <ComposedChart
@@ -47,13 +38,13 @@ export default function CurrentPlot({
                 <XAxis
                     xAxisId="userPoints"
                     type="number"
-                    dataKey="x"
+                    dataKey="X"
                     name="X"
                 />
                 <XAxis
                     xAxisId="fitPoints"
                     type="number"
-                    dataKey="x"
+                    dataKey="X"
                     hide={true}
                 />
                 <YAxis
@@ -65,7 +56,7 @@ export default function CurrentPlot({
                     name="Approximated Curve"
                     xAxisId="fitPoints"
                     data={fitDataPoints}
-                    dataKey="y"
+                    dataKey="Y"
                     stroke="#101c3e"
                     type="monotone"
                     dot={false}
@@ -74,7 +65,7 @@ export default function CurrentPlot({
                     name="User Points"
                     xAxisId="userPoints"
                     data={userDataPoints}
-                    dataKey="y"
+                    dataKey="Y"
                     fill="#1da1b2"
                 />
                 <Legend />

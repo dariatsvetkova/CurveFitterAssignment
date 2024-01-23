@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace CurveFitter.Server.Controllers
+
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/curvefit")]
     public class CurveFitController : ControllerBase
     {
         private static readonly string[] FitTypes =
@@ -19,14 +21,15 @@ namespace CurveFitter.Server.Controllers
         }
 
         [HttpGet(Name = "GetCurveFit")]
-        public CurveFit Get()
+        public IActionResult Get()
         {
-            return new CurveFit
+            CurveFit result = new CurveFit
             {
                 Equation = [2, 3, 5, 6, 0],
                 UserDataPoints = [ new DataPoint(0, 2), new DataPoint(1, 3), new DataPoint(2, 5) ],
                 FitDataPoints = [new DataPoint(0, 1), new DataPoint(1, 2), new DataPoint(2, 5)]
             };
+            return new JsonResult(result);
         }
     }
 }

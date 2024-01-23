@@ -1,6 +1,6 @@
 @CurveFitter.Server_HostAddress = http://localhost:5082
 
-GET {{CurveFitter.Server_HostAddress}}/curvefit/
+GET {{CurveFitter.Server_HostAddress}}/api/curvefit/
 Accept: application/json
 
 ###
