@@ -4,7 +4,6 @@ import { curveFitOptions } from '../utility/constants';
 
 export default function UserInputs() {
     const [fit, setFit] = useState<CurveFitType>(curveFitOptions[0]);
-    console.log('fit:', fit);
 
     const handleFitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setFit(curveFitOptions[parseInt(e.target.value)]);

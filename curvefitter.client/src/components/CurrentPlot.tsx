@@ -8,22 +8,34 @@ import {
     ResponsiveContainer,
     ComposedChart,
     Line,
+    Legend,
 } from 'recharts';
+import { DataPointType } from '../models/CurveTypes';
 
-const data = [
-    { x: 100, userY: 200, z: 200 },
-    { x: 110, fitY: 180, z: 200 },
-    { x: 120, fitY: 200, z: 260 },
-    { x: 140, fitY: 250, z: 280 },
-    { x: 150, fitY: 400, z: 500 },
-    { x: 170, userY: 300, z: 400 },
+interface CurrentPlotProps {
+    userDataPoints?: DataPointType[];
+    fitDataPoints?: DataPointType[];
+}
+
+const mockUserDataPoints = [
+    { x: 150, y: 400 },
+    { x: 110, y: 180 },
 ];
 
-export default function CurrentPlot() {
+const mockFitDataPoints = [
+    { x: 100, y: 200 },
+    { x: 120, y: 200 },
+    { x: 140, y: 250 },
+    { x: 170, y: 300 },
+];
+
+export default function CurrentPlot({
+    userDataPoints = mockUserDataPoints,
+    fitDataPoints = mockFitDataPoints,
+}: CurrentPlotProps) {
     return (
         <ResponsiveContainer width="100%" height={400}>
             <ComposedChart
-                data={data}
                 margin={{
                     top: 20,
                     right: 20,
@@ -32,11 +44,40 @@ export default function CurrentPlot() {
                 }}
             >
                 <CartesianGrid />
-                <XAxis type="number" dataKey="x" name="stature" unit="cm" />
-                <YAxis type="number" dataKey="fitY" name="weight" unit="kg" />
+                <XAxis
+                    xAxisId="userPoints"
+                    type="number"
+                    dataKey="x"
+                    name="X"
+                />
+                <XAxis
+                    xAxisId="fitPoints"
+                    type="number"
+                    dataKey="x"
+                    hide={true}
+                />
+                <YAxis
+                    type="number"
+                    name="Y"
+                />
                 <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-                <Scatter name="User Points" dataKey="userY" fill="#8884d8" />
-                <Line name="Approximated Curve" dataKey="fitY" stroke="#82ca9d" />"
+                <Line
+                    name="Approximated Curve"
+                    xAxisId="fitPoints"
+                    data={fitDataPoints}
+                    dataKey="y"
+                    stroke="#101c3e"
+                    type="monotone"
+                    dot={false}
+                />"
+                <Scatter
+                    name="User Points"
+                    xAxisId="userPoints"
+                    data={userDataPoints}
+                    dataKey="y"
+                    fill="#1da1b2"
+                />
+                <Legend />
             </ComposedChart>
         </ResponsiveContainer>
     );
