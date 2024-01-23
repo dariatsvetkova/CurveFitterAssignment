@@ -1,0 +1,10 @@
+@CurveFitter.Server_HostAddress = http://localhost:5082
+
+GET {{CurveFitter.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+GET {{CurveFitter.Server_HostAddress}}/api/helloworld
+Accept: application/json
+
+###
