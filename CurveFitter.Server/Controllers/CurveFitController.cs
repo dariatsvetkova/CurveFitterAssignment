@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
+using MathNet.Numerics;
+
+// https://numerics.mathdotnet.com/api/MathNet.Numerics/Fit.htm
 
 namespace CurveFitter.Server.Controllers
 
@@ -23,11 +25,24 @@ namespace CurveFitter.Server.Controllers
         [HttpGet(Name = "GetCurveFit")]
         public IActionResult Get()
         {
+            string userFitType = "quadratic";
+            double[] userInputsX = [1, 2, 3, 4, 5];
+            double[] userInputsY = [1, 4, 8, 17, 25];
+
+            double[] fitEquation = Fit.Polynomial(userInputsX, userInputsY, 2);
+
+            DataPoint[] fitPoints = userInputsX.Select(x => new DataPoint(
+                x,
+                fitEquation[0] + x * fitEquation[1] + Math.Pow(x, 2) * fitEquation[2]
+            )).ToArray();
+
+            DataPoint[] userPoints = userInputsX.Zip(userInputsY, (x, y) => new DataPoint(x, y)).ToArray();
+
             CurveFit result = new CurveFit
             {
-                Equation = [2, 3, 5, 6, 0],
-                UserDataPoints = [ new DataPoint(0, 2), new DataPoint(1, 3), new DataPoint(2, 5) ],
-                FitDataPoints = [new DataPoint(0, 1), new DataPoint(1, 2), new DataPoint(2, 5)]
+                Equation = fitEquation,
+                UserDataPoints = userPoints,
+                FitDataPoints = fitPoints,
             };
             return new JsonResult(result);
         }
