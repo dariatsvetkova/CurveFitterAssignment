@@ -1,98 +1,87 @@
-﻿using CurveFitter.Server;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Data.Entity;
-using System.Linq;
-
+using System.Xml;
 
 namespace CurveFitter.Server.Controllers
 {
-    public class ArchivesController : Controller
+    [Route("api/archives")]
+    [ApiController]
+    public class ArchivesController(ArchiveContext context) : ControllerBase
     {
-        // GET: ArchivesController/Users/5
-        public async ActionResult ActionResult<T>(int id)
+        //private readonly ArchiveContext _context = context;
+
+        //private bool ArchiveExists(int id)
+        //{
+        //    return _context.archives.any(a => a.id == id);
+        //}
+
+        //private bool UserExists(int id)
+        //{
+        //    return id == 1;
+        //}
+
+        // GET: api/Archives/
+        [HttpGet]
+        public async Task<ActionResult<string>> GetArchives()
         {
-            await using var db = new ArchiveContext();
-
-            List<Archive> archiveList =
-                await (from archive in db.Archives
-                    join user in db.Users on archive.UserId equals user.Id into tmp
-                    from m in tmp.DefaultIfEmpty()
-
-                    select new Archive
-                    {
-                        Id = sollIst.Id,
-                        CustomerId = sollIst.CustomerId,
-                        User = m,
-                    }
-  ).ToListAsync();
-
-
-            return queryResults.AsAsyncEnumerable();
+            return "Hello World";
         }
 
-        // GET: HomeController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
+        //// GET: api/Archives/5
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<string>> GetArchive(int id)
+        //{
+        //    return id.ToString();
+        //    //Task<ActionResult<IEnumerable<Archive>>>
+        //    //return await _context.Archives.Where(a => a.UserId == id).ToListAsync();
+        //}
 
-        // POST: HomeController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //// POST: api/Archives
+        //[HttpPost]
+        //public async Task<ActionResult<Archive>> PostArchive(Archive archive)
+        //{
+        //    if (UserExists(archive.UserId) == false)
+        //    {
+        //        return NotFound("User not found");
+        //    }
 
-        // GET: HomeController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
+        //    //double[] values = { 1.2, 3.4, 5.6 };
+        //    //byte[] data = new byte[values.Length * sizeof(double)];
+        //    //Buffer.BlockCopy(values, 0, data, 0, data.Length);
 
-        // POST: HomeController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //    //MyEntity entity = new MyEntity
+        //    //{
+        //    //    Name = "Entity 1",
+        //    //    Values = data
+        //    //};
 
-        // GET: HomeController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
+        //    //using (var context = new MyDbContext())
+        //    //{
+        //    //    context.MyEntities.Add(entity);
+        //    //    context.SaveChanges();
+        //    //}
 
-        // POST: HomeController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //    _context.Archives.Add(archive);
+        //    await _context.SaveChangesAsync();
+
+        //    return CreatedAtAction("GetArchive", new { id = archive.Id }, archive);
+        //}
+
+        //// DELETE: api/Archives/5
+        //[HttpDelete("{id}")]
+        //public async Task<ActionResult<Archive>> DeleteArchive(int id)
+        //{
+        //    if (ArchiveExists(id) == false)
+        //    {
+        //        return NotFound();
+        //    }
+        //    var archive = await _context.Archives.FindAsync(id);
+
+        //    _context.Archives.Remove(archive);
+        //    await _context.SaveChangesAsync();
+
+        //    return archive;
+        //}
     }
 }

@@ -5,12 +5,12 @@ namespace CurveFitter.Server
     public class DataPoint
     {
         [JsonPropertyName("X")]
-        public double X { get; set; }
+        public int X { get; set; }
 
         [JsonPropertyName("Y")]
-        public double Y { get; set; }
+        public int Y { get; set; }
 
-        public DataPoint(double x, double y)
+        public DataPoint(int x, int y)
         {
             X = x;
             Y = y;
@@ -20,7 +20,7 @@ namespace CurveFitter.Server
     public class CurveFit
     {
         [JsonPropertyName("Equation")]
-        public required double[] Equation { get; set; }
+        public required int[] Equation { get; set; }
 
         [JsonPropertyName("UserDataPoints")]
         public required DataPoint[] UserDataPoints { get; set; }
