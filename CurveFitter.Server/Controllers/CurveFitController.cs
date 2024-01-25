@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MathNet.Numerics;
+using CurveFitter.Server.Models;
 
 // https://numerics.mathdotnet.com/api/MathNet.Numerics/Fit.htm
 

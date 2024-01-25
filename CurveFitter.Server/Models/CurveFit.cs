@@ -1,20 +1,14 @@
 using System.Text.Json.Serialization;
 
-namespace CurveFitter.Server
+namespace CurveFitter.Server.Models
 {
-    public class DataPoint
+    public class DataPoint(double x, double y)
     {
         [JsonPropertyName("X")]
-        public double X { get; set; }
+        public double X { get; set; } = x;
 
         [JsonPropertyName("Y")]
-        public double Y { get; set; }
-
-        public DataPoint(double x, double y)
-        {
-            X = x;
-            Y = y;
-        }
+        public double Y { get; set; } = y;
     }
 
     public class CurveInputs
