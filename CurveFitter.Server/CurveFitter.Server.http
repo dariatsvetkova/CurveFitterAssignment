@@ -5,32 +5,32 @@ Accept: application/json
 
 ###
 
-GET {{CurveFitter.Server_HostAddress}}/api/archives/
-Accept: application/json
+# GET {{CurveFitter.Server_HostAddress}}/api/archives/
+# Accept: application/json
 
-###
+# ###
 
-GET {{CurveFitter.Server_HostAddress}}/api/archives/{id}/
-Accept: application/json
+# GET {{CurveFitter.Server_HostAddress}}/api/archives/{id}/
+# Accept: application/json
 
-###
+# ###
 
-POST {{CurveFitter.Server_HostAddress}}/api/archives/
-Content-Type: application/json
-Accept: application/json
+# POST {{CurveFitter.Server_HostAddress}}/api/archives/
+# Content-Type: application/json
+# Accept: application/json
 
-{
-  "Timestamp": "2022-01-01T00:00:00",
-  "FitType": "Linear",
-  "Equation": [1.0, 2.0],
-  "UserDataPoints": [{"X": 1.0, "Y": 2.0}, {"X": 2.0, "Y": 3.0}],
-  "FitDataPoints": [{"X": 1.0, "Y": 2.0}, {"X": 2.0, "Y": 3.0}],
-  "UserId": 1
-}
+# {
+#   "Timestamp": "2022-01-01T00:00:00",
+#   "FitType": "Linear",
+#   "Equation": [1.0, 2.0],
+#   "UserDataPoints": [{"X": 1.0, "Y": 2.0}, {"X": 2.0, "Y": 3.0}],
+#   "FitDataPoints": [{"X": 1.0, "Y": 2.0}, {"X": 2.0, "Y": 3.0}],
+#   "UserId": 1
+# }
 
-###
+# ###
 
-DELETE {{CurveFitter.Server_HostAddress}}/api/archives/1
-Accept: application/json
+# DELETE {{CurveFitter.Server_HostAddress}}/api/archives/1
+# Accept: application/json
 
-###
+# ###

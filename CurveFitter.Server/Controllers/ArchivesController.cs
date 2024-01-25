@@ -7,7 +7,8 @@ namespace CurveFitter.Server.Controllers
 {
     [Route("api/archives")]
     [ApiController]
-    public class ArchivesController(ArchiveContext context) : ControllerBase
+    public class ArchivesController() : ControllerBase
+    //public class ArchivesController(ArchiveContext context) : ControllerBase
     {
         //private readonly ArchiveContext _context = context;
 

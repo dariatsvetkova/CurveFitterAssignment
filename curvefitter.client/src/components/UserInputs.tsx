@@ -10,6 +10,8 @@ interface UserInputProps {
         e: React.ChangeEvent<HTMLInputElement>,
         index: number
     ) => void;
+    handleDataPointsAmount: (i?: number) => void;
+    handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }
 
 export default function UserInputs({
@@ -17,11 +19,11 @@ export default function UserInputs({
     handleFitChange,
     dataPoints,
     handleDataPointChange,
+    handleDataPointsAmount,
+    handleSubmit,
 }: UserInputProps) {
-    
-
     return (
-        <form>
+        <form onSubmit={(e) => handleSubmit(e)}>
             <label htmlFor="curveFitType">Select desired curve fit type:</label>
             <select
                 id="curveFitType"
@@ -32,38 +34,61 @@ export default function UserInputs({
                 <option value="" disabled>
                     Select a curve fit type
                 </option>
-                {curveFitOptions.map((option: CurveFitType, index: number) => (
-                    <option value={index} key={option.name}>
+                {curveFitOptions.map((option: CurveFitType) => (
+                    <option value={option.value} key={option.name}>
                         {option.name}
                     </option>
                 ))}
             </select>
-            {Array.from({ length: fit ? fit.minDataPoints : 0 })
-                .map((_, index) => (
-                    <fieldset key={`dataPoint-${index}`}>
-                        <legend>
-                            Data point {index + 1}
+            {dataPoints.map((point, index) => (
+                <fieldset key={`dataPoint-${index}`} className="pointInput">
+                    <legend>
+                        Data point {index + 1}
+                        {index < fit.minDataPoints && (
                             <abbr title="required">*</abbr>
-                        </legend>
-                        <label>x:</label>
-                        <input
-                            name={`x-${index}`}
-                            value={dataPoints[index]?.x}
-                            type="number"
-                            required
-                            onChange={(e) => handleDataPointChange(e, index)}
-                        />
-                        <label>y:</label>
-                        <input
-                            name={`y-${index}`}
-                            value={dataPoints[index]?.y}
-                            type="number"
-                            required
-                            onChange={(e) => handleDataPointChange(e, index)}
-                        />
-                    </fieldset>
+                        )}
+                    </legend>
+
+                    <label>x:</label>
+                    <input
+                        name={`X-${index}`}
+                        value={point.X}
+                        type="number"
+                        required
+                        onChange={(e) => handleDataPointChange(e, index)}
+                    />
+
+                    <label>y:</label>
+                    <input
+                        name={`Y-${index}`}
+                        value={point.Y}
+                        type="number"
+                        required={index < fit.minDataPoints}
+                        onChange={(e) => handleDataPointChange(e, index)}
+                    />
+
+                    {index >= fit.minDataPoints && (
+                        <button
+                            type="button"
+                            onClick={() => handleDataPointsAmount(index)}
+                        >
+                            Remove
+                        </button>
+                    )}
+                </fieldset>
                 )
-             )}
+            )}
+
+            <div className="formButtonContainer">
+                <button
+                    type="button"
+                    onClick={() => handleDataPointsAmount()}
+                >
+                    Add data point
+                </button>
+
+                <button type="submit">Submit</button>
+            </div>
         </form>
     )
 }

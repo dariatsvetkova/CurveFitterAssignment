@@ -3,17 +3,52 @@
     margin: 0 auto;
     padding: 2rem;
     text-align: center;
+    height: 100%;
 }
 
-tr:nth-child(even) {
-    background: #F2F2F2;
+form {
+    text-align: left;
 }
 
-tr:nth-child(odd) {
-    background: #FFF;
+select {
+    margin-left: 1rem;
+    font-size: 1rem;
 }
 
-th, td {
-    padding-left: 1rem;
-    padding-right: 1rem;
+.pointInput {
+    border: none;
+    margin: 1rem 0;
+    padding: 0;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pointInput label,
+.pointInput input {
+    margin: 0 0.5rem;
+}
+
+
+@media (min-width: 1024px) {
+    .plotAreaContainer {
+        margin: 1rem auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+.formButtonContainer {
+    margin: 2rem 0;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.formButtonContainer button {
+    min-width: 10rem;
 }

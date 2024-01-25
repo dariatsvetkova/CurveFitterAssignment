@@ -10,56 +10,87 @@ namespace CurveFitter.Server.Controllers
     [Route("api/curvefit")]
     public class CurveFitController : ControllerBase
     {
-        public static readonly int CONVERSION_COEFF = 100000;
+        private static readonly int[] FitTypes = { 1, 2, 3 };
 
-        private static readonly string[] FitTypes =
-        [
-            "linear", "quadratic", "cubic",
-        ];
-
-        private readonly ILogger<CurveFitController> _logger;
-
-        public CurveFitController(ILogger<CurveFitController> logger)
+        private static (bool, string) ValidateInputs(DataPoint[] inputs, int fitType)
         {
-            _logger = logger;
+            if (FitTypes.Contains(fitType) == false)
+            {
+                return (false, $"Invalid fit type: {fitType}");
+            }
+
+            if (inputs.Length < fitType + 1)
+            {
+                return (false, $"Not enough data points: {inputs.Length}");
+            }
+
+            return (true, "");
+        }
+
+        private static (double[], double[]) ConvertInputs(DataPoint[] inputsInt)
+        {
+            double[] inputsX = inputsInt.Select(p => p.X).ToArray();
+            double[] inputsY = inputsInt.Select(p => p.Y).ToArray();
+
+            return ( inputsX, inputsY );
+        }
+
+        private static DataPoint[] ConvertDataPoints(double[] pointsX, double[] pointsY)
+        {
+            return pointsX.Select((x, ind) => {
+                int xInt = Convert.ToInt32(x);
+                int yInt = Convert.ToInt32(pointsY[ind]);
+                return new DataPoint(xInt, yInt);
+            }).ToArray();
         }
 
         [HttpGet(Name = "GetCurveFit")]
-        public IActionResult Get()
+        public IActionResult Get(string userPoints, string fitType)
         {
-            string userFitType = "quadratic";
-            
-            int[] userInputsXInt = [1 * CONVERSION_COEFF, 2 * CONVERSION_COEFF, 3 * CONVERSION_COEFF, 4 * CONVERSION_COEFF];
-            int[] userInputsYInt = [1 * CONVERSION_COEFF, 4 * CONVERSION_COEFF, 8 * CONVERSION_COEFF, 17 * CONVERSION_COEFF];
+            // Parse user inputs from the URL query string
 
-            double[] userInputsX = userInputsXInt
-                .Select(x => Convert.ToDouble(x) / CONVERSION_COEFF)
+            DataPoint[] userPointsObj = userPoints
+                .Split(',')
+                .Select(s => s.Split('y'))
+                .Select(s => new DataPoint(Convert.ToDouble(s[0]), Convert.ToDouble(s[1])))
                 .ToArray();
-            double[] userInputsY = userInputsYInt
-                .Select(y => Convert.ToDouble(y) / CONVERSION_COEFF)
-                .ToArray();
-            
-            double[] fitEquation = Fit.Polynomial(userInputsX, userInputsY, 2);
-            int[] fitEquationInt = fitEquation
-                .Select(c => Convert.ToInt32(c * CONVERSION_COEFF))
+                        
+            int fitTypeInt = Convert.ToInt32(fitType);
+
+            // Validate user inputs
+
+            (bool isValid, string errorMessage) = ValidateInputs(userPointsObj, fitTypeInt);
+
+            if (isValid == false)
+            {
+                return BadRequest(errorMessage);
+            }
+
+            // Convert user inputs into separate lists so we can use them in the Fit.Polynomial method
+
+            (double[] userPointsX, double[] userPointsY) = ConvertInputs(userPointsObj);
+
+            // Get polynomial coefficients for the fit (where list index corresponds to the power of x)
+
+            double[] fitEquation = new double[fitTypeInt + 1];
+            fitEquation = Fit.Polynomial(userPointsX, userPointsY, fitTypeInt);
+
+            // Note that values of X are the same for user points and fit points, so we only need to calculate Y values
+            double[] fitPointsY = userPointsX
+                .Select(x => fitEquation.Select((coeff, ind) => coeff * Math.Pow(x, ind)).Sum())
                 .ToArray();
 
-            DataPoint[] fitPoints = userInputsX.Select(x => {
-                int xInt = Convert.ToInt32(x * CONVERSION_COEFF);
-                int yInt = Convert.ToInt32(fitEquation[0] + x * fitEquation[1] + Math.Pow(x, 2) * fitEquation[2]);
-                return new DataPoint(xInt, yInt);
-            }).ToArray();
-
-            DataPoint[] userPoints = userInputsXInt
-                .Zip(userInputsYInt, (x, y) => new DataPoint(x, y))
-                .ToArray();
+            DataPoint[] fitPoints = ConvertDataPoints(userPointsX, fitPointsY);
+            DataPoint[] userPointsFormatted = ConvertDataPoints(userPointsX, userPointsY);
 
             CurveFit result = new CurveFit
             {
-                Equation = fitEquationInt,
-                UserDataPoints = userPoints,
+                Equation = fitEquation,
+                UserDataPoints = userPointsFormatted,
                 FitDataPoints = fitPoints,
             };
+
+            // TBD: update serialization settings to convert properties to camelCase
             return new JsonResult(result);
         }
     }

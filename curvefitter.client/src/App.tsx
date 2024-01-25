@@ -1,12 +1,14 @@
 import React from 'react';
 import './App.css';
-import { Layout, PlotView, UserPlots } from './components';
+import { Layout, PlotView } from './components';
 
 export default function App() {
     return (
         <Layout>
             <PlotView />
-            <UserPlots />
+            {/* TBD: add UI for displaying archived plots
+                <UserPlots />
+             */}
         </Layout>
     )
 }

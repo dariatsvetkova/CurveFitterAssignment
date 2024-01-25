@@ -13,17 +13,14 @@ import {
 import { DataPointType } from '../models/CurveTypes';
 
 interface CurrentPlotProps {
-    userDataPoints?: DataPointType[];
+    userDataPoints: DataPointType[];
     fitDataPoints?: DataPointType[];
 }
 
 export default function CurrentPlot({
-    userDataPoints = [],
+    userDataPoints,
     fitDataPoints = [],
 }: CurrentPlotProps) {
-    console.log('userDataPoints:', userDataPoints);
-    console.log('fitDataPoints:', fitDataPoints);
-
     return (
         <ResponsiveContainer width="100%" height={400}>
             <ComposedChart

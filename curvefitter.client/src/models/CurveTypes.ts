@@ -2,12 +2,13 @@ export type FitsType = 'linear' | 'cubic' | 'quadratic';
 
 export interface CurveFitType {
     name: FitsType;
+    value: 1 | 2 | 3;
     minDataPoints: number;
 }
 
 export type DataPointType = {
-    x: number;
-    y: number;
+    X: number;
+    Y: number;
 }
 
 export type EquationType = number[];
@@ -18,8 +19,14 @@ export interface CurveType {
     FitDataPoints: DataPointType[];
 }
 
-export interface ServerResponseType {
+export interface CurveRequestParamsType {
+    userPoints: DataPointType[];
+    fitType: CurveFitType['value'];
+}
+
+export interface CurveServerResponseType {
     data?: CurveType;
     loading: boolean;
     error: boolean;
+    message?: string;
 }
