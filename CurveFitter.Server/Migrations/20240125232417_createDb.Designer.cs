@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CurveFitter.Server.Migrations
 {
-    [DbContext(typeof(ArchiveContext))]
+    [DbContext(typeof(Models.DataContext))]
     [Migration("20240125232417_createDb")]
     partial class createDb
     {

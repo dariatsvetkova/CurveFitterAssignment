@@ -4,9 +4,9 @@ using System.Text.Json;
 
 namespace CurveFitter.Server.Models
 {
-    public class ArchiveContext : DbContext
+    public class DataContext : DbContext
     {
-        public ArchiveContext() { }
+        public DataContext() { }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Archive> Archives { get; set; }
@@ -40,6 +40,9 @@ namespace CurveFitter.Server.Models
 
             builder.Entity<Archive>()
                 .HasKey(a => a.Id);
+
+            builder.Entity<User>()
+                .HasKey(u => u.Id);
 
             builder.Entity<Archive>()
                 .Property(a => a.Equation)

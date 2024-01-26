@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CurveFitter.Server.Migrations
 {
-    [DbContext(typeof(ArchiveContext))]
+    [DbContext(typeof(Models.DataContext))]
     partial class ArchiveContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
