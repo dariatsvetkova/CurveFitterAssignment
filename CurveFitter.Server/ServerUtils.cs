@@ -1,4 +1,7 @@
-﻿namespace CurveFitter.Server
+﻿using System.Net;
+using Microsoft.AspNetCore.Mvc;
+
+namespace CurveFitter.Server
 {
     public class ServerUtils
     {

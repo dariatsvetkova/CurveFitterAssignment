@@ -5,7 +5,7 @@ Accept: application/json
 
 ###
 
-GET {{CurveFitter.Server_HostAddress}}/api/users/exists/{id}
+GET {{CurveFitter.Server_HostAddress}}/api/users/{id}
 
 ###
 

@@ -1,9 +1,6 @@
 ﻿using CurveFitter.Server.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using System.Data.Entity.Core;
 
 namespace CurveFitter.Server.Controllers
 {
@@ -14,11 +11,12 @@ namespace CurveFitter.Server.Controllers
 
         private bool UserExists(int id)
         {
-            return _context.Users.Any(a => a.Id == id);
+            return _context.Users.Any(u => u.Id == id);
         }
 
         private int GetUniqueId()
         {
+            return 123456791;
             int id = ServerUtils.GenerateId();
             while (UserExists(id))
             {
@@ -27,52 +25,50 @@ namespace CurveFitter.Server.Controllers
             return id;
         }
 
-        // GET: users/exists/5
+        // GET: api/users
+        [Route("api/users")]
         [HttpGet]
-        [Route("api/users/exists/{id}")]
+        public async Task<ActionResult<List<User>>> GetUsers()
+        {
+            // return list of all users
+            return await _context.Users.ToListAsync();
+        }
+
+        // GET: api/users/5
+        [Route("api/users/{id}")]
+        [HttpGet("{id}")]
         public ActionResult<bool> Exists(int id)
         {
             return UserExists(id);
         }
 
-        // POST: Users/Create
-        [HttpPost]
+        // POST: api/users/create
         [Route("api/users/create")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult<string>> CreateUserAsync()
+        public async Task<IActionResult> CreateUserAsync()
         {
-            return "Hello World2";
-            //try
-            //{
-            //    int newUserId = GetUniqueId();
+            try
+            {
+                int newUserId = GetUniqueId();
 
-            //    User newUser = new User
-            //    {
-            //        Id = newUserId,
-            //        Archives = []
-            //    };
+                User newUser = new User
+                {
+                    Id = newUserId,
+                    Archives = []
+                };
 
-            //    _context.Users.Add(newUser);
-            //    await _context.SaveChangesAsync();
+                _context.Users.Add(newUser);
+                await _context.SaveChangesAsync();
 
-            //    return CreatedAtAction("CreateUserAsync", new { id = newUser.Id }, newUser);
-            //}
-            //catch (DbUpdateException Ex)
-            //{
-            //    return BadRequest(Ex.InnerException?.Message ?? "DbUpdateException");
-            //}
-            //catch (EntityCommandExecutionException Ex)
-            //{
-            //    return BadRequest(Ex.InnerException?.Message ?? "EntityCommandExecutionException");
-            //}
-            //catch (InvalidOperationException Ex)
-            //{
-            //    return BadRequest(Ex.InnerException?.Message ?? "InvalidOperationException");
-            //}
-            //catch (Exception Ex)
-            //{
-            //    return BadRequest(Ex.InnerException?.Message ?? "Unknown Exception");
-            //}
+                return Ok(new { id = newUser.Id });
+
+                //return CreatedAtAction("CreateUserAsync", new { id = 123456791 });
+            }
+            catch (Exception Ex)
+            {
+                return BadRequest(new { message = Ex.InnerException?.Message ?? "Unhandled exception" });
+            }
         }
     }
 }
