@@ -7,8 +7,9 @@ import {
     CurveRequestParamsType,
 } from '../models/CurveTypes';
 import { curveFitOptions, defaultServerResponse } from '../utility/constants';
-import { getCurveData } from '../dbUtility/getData';
+import { getCurveData } from '../dbUtility/getCurveData';
 import { validateInputs } from '../utility/validateInputs';
+import SavePlot from './SavePlot';
 
 export default function PlotView() {
     // User input state
@@ -76,7 +77,7 @@ export default function PlotView() {
 
         setResponse({ ...response, loading: true });
 
-        getCurveData('api/curvefit', params)
+        getCurveData(params)
             .then((data) => {
                 data && setResponse({
                     data: data,
@@ -105,9 +106,10 @@ export default function PlotView() {
                 handleDataPointChange={handleDataPointChange}
                 handleDataPointsAmount={handleDataPointsAmount}
                 handleSubmit={handleSumbit}
+                loading={response.loading}
             />
             {response.error && (
-                <p>{response.message}</p>
+                <p className="error">{response.message}</p>
             )}
             {response.loading && (
                 <p>Loading...</p>
@@ -119,6 +121,7 @@ export default function PlotView() {
                         userDataPoints={response.data?.UserDataPoints}
                         fitDataPoints={response.data?.FitDataPoints}
                     />
+                    <SavePlot data={response.data} />
                 </div>
             )}
         </div>

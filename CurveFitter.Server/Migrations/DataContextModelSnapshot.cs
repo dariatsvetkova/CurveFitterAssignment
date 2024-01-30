@@ -30,6 +30,10 @@ namespace CurveFitter.Server.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("TEXT");
 
@@ -60,7 +64,7 @@ namespace CurveFitter.Server.Migrations
 
             modelBuilder.Entity("CurveFitter.Server.Models.Archive", b =>
                 {
-                    b.HasOne("CurveFitter.Server.Models.User", "User")
+                    b.HasOne("CurveFitter.Server.Models.User", null)
                         .WithMany("Archives")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

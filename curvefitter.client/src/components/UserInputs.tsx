@@ -12,6 +12,7 @@ interface UserInputProps {
     ) => void;
     handleDataPointsAmount: (i?: number) => void;
     handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+    loading: boolean;
 }
 
 export default function UserInputs({
@@ -21,6 +22,7 @@ export default function UserInputs({
     handleDataPointChange,
     handleDataPointsAmount,
     handleSubmit,
+    loading,
 }: UserInputProps) {
     return (
         <form onSubmit={(e) => handleSubmit(e)}>
@@ -83,11 +85,17 @@ export default function UserInputs({
                 <button
                     type="button"
                     onClick={() => handleDataPointsAmount()}
+                    disabled={loading}
                 >
                     Add data point
                 </button>
 
-                <button type="submit">Submit</button>
+                <button
+                    type="submit"
+                    disabled={loading}
+                >
+                    Submit
+                </button>
             </div>
         </form>
     )

@@ -9,17 +9,10 @@ namespace CurveFitter.Server.Controllers
 {
     [ApiController]
     [Route("api/curvefit")]
-    public class CurveFitController : ControllerBase
+    public class CurveFitController() : ControllerBase
     {
-        private static readonly int[] FitTypes = { 1, 2, 3 };
-
-        private static (bool, string) ValidateInputs(DataPoint[] inputs, int fitType)
+        private static (bool, string) ValidateInputs(int fitType, DataPoint[] inputs)
         {
-            if (FitTypes.Contains(fitType) == false)
-            {
-                return (false, $"Invalid fit type: {fitType}");
-            }
-
             if (inputs.Length < fitType + 1)
             {
                 return (false, $"Not enough data points: {inputs.Length}");
@@ -45,22 +38,19 @@ namespace CurveFitter.Server.Controllers
             }).ToArray();
         }
 
+        // GET: api/curvefit?userPoints="1y-2,3y-4"&fitType=1
         [HttpGet(Name = "GetCurveFit")]
         public IActionResult Get(string userPoints, string fitType)
         {
             // Parse user inputs from the URL query string
 
-            DataPoint[] userPointsObj = userPoints
-                .Split(',')
-                .Select(s => s.Split('y'))
-                .Select(s => new DataPoint(Convert.ToDouble(s[0]), Convert.ToDouble(s[1])))
-                .ToArray();
-                        
+            DataPoint[] userPointsObj = ServerUtils.StringToDataPoints(userPoints);
+
             int fitTypeInt = Convert.ToInt32(fitType);
 
             // Validate user inputs
 
-            (bool isValid, string errorMessage) = ValidateInputs(userPointsObj, fitTypeInt);
+            (bool isValid, string errorMessage) = ServerUtils.ValidateUserInputs(userPointsObj, fitTypeInt);
 
             if (isValid == false)
             {

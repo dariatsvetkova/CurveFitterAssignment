@@ -1,6 +1,5 @@
 ﻿using CurveFitter.Server.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace CurveFitter.Server.Controllers
 {
@@ -8,16 +7,12 @@ namespace CurveFitter.Server.Controllers
     public class UsersController(DataContext context) : ControllerBase
     {
         private readonly DataContext _context = context;
-
-        private bool UserExists(int id)
-        {
-            return _context.Users.Any(u => u.Id == id);
-        }
+        private readonly DbUtils _dbUtils = new DbUtils(context);
 
         private int GetUniqueId()
         {
             int id = ServerUtils.GenerateId();
-            while (UserExists(id))
+            while (_dbUtils.UserExists(id) || id == 0)
             {
                 id = ServerUtils.GenerateId();
             }

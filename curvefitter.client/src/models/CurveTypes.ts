@@ -30,3 +30,13 @@ export interface CurveServerResponseType {
     error: boolean;
     message?: string;
 }
+
+export interface CurveToArchiveType extends CurveType {
+    userId: number;
+    name: string;
+}
+
+export interface ArchivedCurveType extends CurveType {
+    id: number;
+    timestamp: string;
+}

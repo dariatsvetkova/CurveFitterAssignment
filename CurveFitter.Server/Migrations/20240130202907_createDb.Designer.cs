@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CurveFitter.Server.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240127003059_CreateDb")]
-    partial class CreateDb
+    [Migration("20240130202907_createDb")]
+    partial class createDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,6 +29,10 @@ namespace CurveFitter.Server.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FitDataPoints")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -62,7 +66,7 @@ namespace CurveFitter.Server.Migrations
 
             modelBuilder.Entity("CurveFitter.Server.Models.Archive", b =>
                 {
-                    b.HasOne("CurveFitter.Server.Models.User", "User")
+                    b.HasOne("CurveFitter.Server.Models.User", null)
                         .WithMany("Archives")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

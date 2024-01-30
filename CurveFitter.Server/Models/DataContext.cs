@@ -77,9 +77,7 @@ namespace CurveFitter.Server.Models
                 );
 
             builder.Entity<User>()
-                .HasMany(u => u.Archives)
-                .WithOne(a => a.User)
-                .HasForeignKey(a => a.UserId);
+                .HasMany(u => u.Archives);
 
             System.Diagnostics.Debug.WriteLine($"Tables created successfully");
         }

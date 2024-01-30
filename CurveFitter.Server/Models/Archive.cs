@@ -4,11 +4,12 @@ namespace CurveFitter.Server.Models
 {
     public class Archive : CurveFit
     {
-        public int Id { get; set; }
+        public required int FitType;
+        public required int Id { get; set; }
+        public required string Name { get; set; }
         public DateTime Timestamp { get; set; }
-        public int UserId { get; set; }
-        [ForeignKey("UserId")]
 
-        public User User { get; set; } = new User();
+        [ForeignKey("UserId")]
+        public required int UserId { get; set; }
     }
 }

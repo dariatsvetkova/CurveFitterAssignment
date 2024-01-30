@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CurveFitter.Server.Migrations
 {
-    public partial class CreateDb : Migration
+    public partial class createDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -28,6 +28,7 @@ namespace CurveFitter.Server.Migrations
                     Equation = table.Column<string>(type: "TEXT", nullable: false),
                     UserDataPoints = table.Column<string>(type: "TEXT", nullable: false),
                     FitDataPoints = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(nullable: false),
                     Timestamp = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<int>(nullable: false)
                 },

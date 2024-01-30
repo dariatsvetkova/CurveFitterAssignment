@@ -52,3 +52,7 @@ select {
 .formButtonContainer button {
     min-width: 10rem;
 }
+
+.error {
+    color: red;
+}

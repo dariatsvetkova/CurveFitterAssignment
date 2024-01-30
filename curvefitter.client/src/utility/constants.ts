@@ -1,4 +1,12 @@
 import { CurveFitType, CurveServerResponseType } from "../models/CurveTypes";
+import { UserType } from "../models/UserTypes";
+
+export const LOCAL_STORAGE_KEY = 'DTSCurveFitter';
+
+export const LOCAL_STORAGE_ITEMS = {
+    user: 'user',
+    currentPlot: 'currentPlot',
+}
 
 export const curveFitOptions: CurveFitType[] = [
     {
@@ -26,3 +34,5 @@ export const defaultServerResponse: CurveServerResponseType = {
 }
 
 export const PRECISION = 3;
+
+export const defaultUserObj: UserType = { id: 0 }
