@@ -5,15 +5,10 @@ Accept: application/json
 
 ###
 
-GET {{CurveFitter.Server_HostAddress}}/api/users/{id}
-
-###
-
 POST {{CurveFitter.Server_HostAddress}}/api/users/create
 Accept: application/json
 
 ###
-
 
 GET {{CurveFitter.Server_HostAddress}}/api/archives/
 Accept: application/json
