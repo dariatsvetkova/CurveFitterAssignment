@@ -31,7 +31,7 @@ export interface CurveServerResponseType {
     message?: string;
 }
 
-export interface CurveToArchiveType extends CurveType {
+export interface ArchivePostParamsType extends CurveType {
     userId: number;
     name: string;
 }

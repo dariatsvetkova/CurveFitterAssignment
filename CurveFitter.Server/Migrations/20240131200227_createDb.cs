@@ -29,8 +29,9 @@ namespace CurveFitter.Server.Migrations
                     UserDataPoints = table.Column<string>(type: "TEXT", nullable: false),
                     FitDataPoints = table.Column<string>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(nullable: false),
-                    Timestamp = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<int>(nullable: false)
+                    UserId = table.Column<int>(nullable: false),
+                    FitType = table.Column<int>(nullable: false),
+                    Timestamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {

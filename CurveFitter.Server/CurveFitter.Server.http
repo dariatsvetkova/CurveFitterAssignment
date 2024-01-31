@@ -16,6 +16,7 @@ Accept: application/json
 ###
 
 POST {{CurveFitter.Server_HostAddress}}/api/archives/add
+Content-Type: application/json
 Accept: application/json
 
 ###

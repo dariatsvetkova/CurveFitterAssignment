@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using CurveFitter.Server.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace CurveFitter.Server.Controllers
 {
@@ -22,30 +23,36 @@ namespace CurveFitter.Server.Controllers
             return await _context.Archives.Where(a => a.UserId == user).ToListAsync();
         }
 
-        // POST: api/archives/add?user=5&name="My Archive"&fitType=1&userPoints="1y-2,3y-4"&fitPoints="1y-2,3y-4"&equation="-1,-1"
+        // POST: api/archives/add
         [Route("api/archives/add")]
         [HttpPost]
-        public async Task<ActionResult<Archive>> PostArchive(
-            int user,
-            string name,
-            int fitType,
-            string userPoints,
-            string fitPoints,
-            string equation
-        )
+        public async Task<ActionResult<ArchiveToSave>> PostArchive([FromBody]string body)
         {
-            if (_dbUtils.UserExists(user) == false)
+            // Validate inputs
+
+            ArchiveToSave newArchiveObj;
+            try
+            {
+                newArchiveObj = JsonSerializer.Deserialize<ArchiveToSave>(body);
+            }
+            catch (Exception Ex)
+            {
+                return BadRequest(new { message = Ex.InnerException?.Message ?? "Failed to parse archive from request body" });
+            }
+
+            (bool isValid, string errorMessage) = ServerUtils.ValidateArchive(newArchiveObj);
+
+            if (!isValid)
+            {
+                return BadRequest(errorMessage);
+            }
+
+            if (_dbUtils.UserExists(newArchiveObj.UserId) == false)
             {
                 return NotFound("User not found");
             }
 
-            // Convert URL parameters to appropriate types
-
-            DataPoint[] userPointsObj = ServerUtils.StringToDataPoints(userPoints);
-            DataPoint[] fitPointsObj = ServerUtils.StringToDataPoints(fitPoints);
-            double[] fitEquation = ServerUtils.StringToEquationArr(equation);
-
-            // Validate inputs
+            // Save archive to the database
 
             int uniqueId = ServerUtils.GenerateId();
             while (_dbUtils.ArchiveExists(uniqueId))
@@ -56,20 +63,14 @@ namespace CurveFitter.Server.Controllers
             Archive newArchive = new Archive
             {
                 Id = uniqueId,
-                UserId = user,
-                Name = name,
                 Timestamp = DateTime.Now,
-                FitType = fitType,
-                UserDataPoints = userPointsObj,
-                FitDataPoints = fitPointsObj,
-                Equation = fitEquation
+                FitType = newArchiveObj.FitType,
+                Name = newArchiveObj.Name,
+                UserId = newArchiveObj.UserId,
+                UserDataPoints = newArchiveObj.UserDataPoints,
+                FitDataPoints = newArchiveObj.FitDataPoints,
+                Equation = newArchiveObj.Equation
             };
-
-            (bool isValid, string errorMessage) = ServerUtils.ValidateArchive(newArchive);
-            if (!isValid)
-            {
-                return BadRequest(errorMessage);
-            }
 
             try
             {
@@ -78,7 +79,7 @@ namespace CurveFitter.Server.Controllers
 
                 return new JsonResult(newArchive);
             }
-             catch (Exception Ex)
+            catch (Exception Ex)
             {
                 return BadRequest(new { message = Ex.InnerException?.Message ?? "Unhandled exception" });
             }

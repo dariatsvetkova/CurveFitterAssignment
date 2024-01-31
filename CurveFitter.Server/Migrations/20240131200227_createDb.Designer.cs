@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CurveFitter.Server.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240130202907_createDb")]
+    [Migration("20240131200227_createDb")]
     partial class createDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,6 +31,9 @@ namespace CurveFitter.Server.Migrations
                     b.Property<string>("FitDataPoints")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("FitType")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .IsRequired()

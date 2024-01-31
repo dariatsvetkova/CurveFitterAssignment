@@ -41,7 +41,7 @@ namespace CurveFitter.Server
         {
             if (FitTypes.Contains(fitType) == false)
             {
-                return (false, $"Invalid fit type: {fitType}");
+                return (false, $"Invalid fit type: {fitType}. ");
             }
             return (true, "");
         }
@@ -50,7 +50,7 @@ namespace CurveFitter.Server
         {
             if (points.Length < fitType + 1)
             {
-                return (false, $"Not enough data points: {points.Length}");
+                return (false, $"Not enough data points: {points.Length}. ");
             }
 
             return (true, "");
@@ -60,7 +60,7 @@ namespace CurveFitter.Server
         {
             if (equation.Length != fitType + 1)
             {
-                return (false, "Equation doesn't contain enough coefficients");
+                return (false, $"Equation {equation.ToString()} doesn't contain enough coefficients. ");
             }
 
             return (true, "");
@@ -74,7 +74,7 @@ namespace CurveFitter.Server
             return (isFitValid && arePointsValid, fitError + pointsError);
         }
 
-        public static (bool, string) ValidateArchive(Archive archive)
+        public static (bool, string) ValidateArchive(ArchiveToSave archive)
         {
             bool isValid = true;
             string errorMessage = "";
@@ -82,16 +82,22 @@ namespace CurveFitter.Server
             if (archive == null)
             {
                 isValid = false;
-                errorMessage = "Archive is null";
+                errorMessage = "Archive is null. ";
                 return (isValid, errorMessage);
+            }
+
+            if (archive.UserId < 1)
+            {
+                isValid = false;
+                errorMessage = "UserId is not valid. ";
             }
 
             if (archive.Name.Length < 1)
             {
                 isValid = false;
-                errorMessage = "Archive name must be present";
+                errorMessage = "Archive name must be present. ";
             }
-            
+
             (bool isFitValid, string fitError) = ValidateFitType(archive.FitType);
             if (!isFitValid)
             {

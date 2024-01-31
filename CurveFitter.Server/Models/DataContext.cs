@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json;
 
 namespace CurveFitter.Server.Models
