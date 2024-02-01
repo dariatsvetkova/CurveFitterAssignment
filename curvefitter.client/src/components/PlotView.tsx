@@ -121,7 +121,8 @@ export default function PlotView() {
                         userDataPoints={response.data?.UserDataPoints}
                         fitDataPoints={response.data?.FitDataPoints}
                     />
-                    <SavePlot data={response.data} />
+
+                    <SavePlot data={response.data} fitType={fit.value} />
                 </div>
             )}
         </div>

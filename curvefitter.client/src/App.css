@@ -10,9 +10,24 @@ form {
     text-align: left;
 }
 
+.inputContainer {
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.formLabel {
+    margin-right: 1rem;
+}
+
 select {
-    margin-left: 1rem;
     font-size: 1rem;
+}
+
+fieldset legend {
+    padding: 0;
 }
 
 .pointInput {
@@ -24,12 +39,6 @@ select {
     justify-content: space-between;
     align-items: center;
 }
-
-.pointInput label,
-.pointInput input {
-    margin: 0 0.5rem;
-}
-
 
 @media (min-width: 1024px) {
     .plotAreaContainer {

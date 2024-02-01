@@ -26,22 +26,27 @@ export default function UserInputs({
 }: UserInputProps) {
     return (
         <form onSubmit={(e) => handleSubmit(e)}>
-            <label htmlFor="curveFitType">Select desired curve fit type:</label>
-            <select
-                id="curveFitType"
-                name="curveFitType"
-                onChange={(e) => handleFitChange(e)}
-                required
-            >
-                <option value="" disabled>
-                    Select a curve fit type
-                </option>
-                {curveFitOptions.map((option: CurveFitType) => (
-                    <option value={option.value} key={option.name}>
-                        {option.name}
+            <div className="inputContainer">
+                <label htmlFor="curveFitType" className="formLabel">
+                    Select desired curve fit type:
+                </label>
+                <select
+                    id="curveFitType"
+                    name="curveFitType"
+                    onChange={(e) => handleFitChange(e)}
+                    required
+                >
+                    <option value="" disabled>
+                        Select a curve fit type
                     </option>
-                ))}
-            </select>
+                    {curveFitOptions.map((option: CurveFitType) => (
+                        <option value={option.value} key={option.name}>
+                            {option.name}
+                        </option>
+                    ))}
+                </select>
+            </div>
+
             {dataPoints.map((point, index) => (
                 <fieldset key={`dataPoint-${index}`} className="pointInput">
                     <legend>

@@ -26,19 +26,9 @@ namespace CurveFitter.Server.Controllers
         // POST: api/archives/add
         [Route("api/archives/add")]
         [HttpPost]
-        public async Task<ActionResult<ArchiveToSave>> PostArchive([FromBody]string body)
+        public async Task<ActionResult<ArchiveToSave>> PostArchive([FromBody]ArchiveToSave newArchiveObj)
         {
             // Validate inputs
-
-            ArchiveToSave newArchiveObj;
-            try
-            {
-                newArchiveObj = JsonSerializer.Deserialize<ArchiveToSave>(body);
-            }
-            catch (Exception Ex)
-            {
-                return BadRequest(new { message = Ex.InnerException?.Message ?? "Failed to parse archive from request body" });
-            }
 
             (bool isValid, string errorMessage) = ServerUtils.ValidateArchive(newArchiveObj);
 
