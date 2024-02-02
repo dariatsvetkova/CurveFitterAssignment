@@ -16,7 +16,7 @@ interface CurrentPlotProps {
     fitDataPoints?: DataPointType[];
 }
 
-export default function CurrentPlot({
+export default function Graph({
     userDataPoints,
     fitDataPoints = [],
 }: CurrentPlotProps) {

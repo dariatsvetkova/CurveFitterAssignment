@@ -1,9 +1,10 @@
 import React, { useContext, useState } from 'react';
-import { CurveFitType, CurveType } from '../models/CurveTypes';
-import { UserContext } from '../store/userContext';
-import { createUser } from '../dbUtility/createUser';
-import { createArchive } from '../dbUtility/createArchive';
-import { ArchivePostParamsType } from '../models/ArchiveTypes';
+import { CurveFitType, CurveType } from '../../models/CurveTypes';
+import { UserContext } from '../../store/userContext';
+import { createUser } from '../../dbUtility/createUser';
+import { createArchive } from '../../dbUtility/createArchive';
+import { ArchivePostParamsType } from '../../models/ArchiveTypes';
+import SavePlotForm from './SavePlotForm';
 
 interface SavePlotProps {
     data: CurveType;
@@ -19,7 +20,10 @@ export default function SavePlot({ data, fitType }: SavePlotProps) {
     const [saved, setSaved] = useState(false);
     const [message, setMessage] = useState('');
 
-    const handleSavePlot = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSavePlot = (
+        e: React.FormEvent<HTMLFormElement>,
+        input: string,
+    ) => {
         e.preventDefault();
 
         if (message.length > 0) setMessage('')
@@ -45,7 +49,7 @@ export default function SavePlot({ data, fitType }: SavePlotProps) {
 
         // Save the plot to user archives
         const params: ArchivePostParamsType = {
-            Name: "plot name",
+            Name: input,
             UserId: id,
             FitType: fitType,
             ...data,
@@ -56,6 +60,9 @@ export default function SavePlot({ data, fitType }: SavePlotProps) {
                     setShowForm(false)
                     setSaved(true)
                     setMessage('Plot saved successfully')
+
+                    const newArchives = user.archives ? [...user.archives, data] : [data]
+                    setUser({ ...user, archives: newArchives })
                 }
                 else throw new Error('No plot id returned from server')
             })
@@ -70,39 +77,11 @@ export default function SavePlot({ data, fitType }: SavePlotProps) {
     return (
         <>
             {showForm && (
-                <form
-                    onSubmit={(e) => handleSavePlot(e)}
-                >
-                    <div className="inputContainer">
-                        <label htmlFor="name" className="formLabel">
-                            Give your plot a distinct name:
-                        </label>
-                        <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            placeholder="Current to Potential Plot"
-                            required
-                        />
-                    </div>
-
-                    <div className="formButtonContainer">
-                        <button
-                            type="button"
-                            onClick={() => setShowForm(false)}
-                            disabled={submitting}
-                        >
-                            Cancel
-                        </button>
-
-                        <button
-                            type="submit"
-                            disabled={submitting}
-                        >
-                            Save
-                        </button>
-                    </div>
-                </form>
+                <SavePlotForm
+                    handleSavePlot={handleSavePlot}
+                    hideForm={() => setShowForm(false)}
+                    submitting={submitting}
+                />
             )}
             {!showForm && !saved && (
                 <button

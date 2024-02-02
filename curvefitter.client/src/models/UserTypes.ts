@@ -1,8 +1,8 @@
-import { CurveType } from "./CurveTypes"
+import { ArchivedCurveType } from "./ArchiveTypes"
 
 export type UserType = {
     id: number,
-    archives?: CurveType[]
+    archives?: ArchivedCurveType[]
 }
 
 export type UserProviderType = [

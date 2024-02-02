@@ -1,3 +1,4 @@
+import { UserArchivesServerResponseType } from "../models/ArchiveTypes";
 import { CurveFitType, CurveServerResponseType } from "../models/CurveTypes";
 import { UserType } from "../models/UserTypes";
 
@@ -26,13 +27,25 @@ export const curveFitOptions: CurveFitType[] = [
     },
 ]
 
-export const defaultServerResponse: CurveServerResponseType = {
-    data: undefined,
+export const defaultServerResponse: Omit<CurveServerResponseType, "data"> = {
     loading: false,
     error: false,
     message: '',
 }
 
+export const defaultCurveServerResponse: CurveServerResponseType = {
+    ...defaultServerResponse,
+    data: undefined,
+}
+
+export const defaultArchiveServerResponse: UserArchivesServerResponseType = {
+    ...defaultServerResponse,
+    data: [],
+}
+
 export const PRECISION = 3;
 
-export const defaultUserObj: UserType = { id: 0 }
+export const defaultUserObj: UserType = {
+    id: 0,
+    archives: [],
+}

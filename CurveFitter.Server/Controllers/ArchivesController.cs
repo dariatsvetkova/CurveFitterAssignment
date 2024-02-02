@@ -11,16 +11,16 @@ namespace CurveFitter.Server.Controllers
         private readonly DataContext _context = context;
         private readonly DbUtils _dbUtils = new DbUtils(context);
 
-        // GET: api/archives?user=5
+        // GET: api/archives?userId=5
         [Route("api/archives")]
-        [HttpGet("{user}")]
-        public async Task<ActionResult<IEnumerable<Archive>>> GetArchive(int user)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Archive>>> GetArchive(int userId)
         {
-            if (!_dbUtils.UserExists(user))
+            if (!_dbUtils.UserExists(userId))
             {
                 return NotFound("User not found");
             }
-            return await _context.Archives.Where(a => a.UserId == user).ToListAsync();
+            return await _context.Archives.Where(a => a.UserId == userId).ToListAsync();
         }
 
         // POST: api/archives/add
@@ -75,26 +75,34 @@ namespace CurveFitter.Server.Controllers
             }
         }
 
-        // DELETE: api/archives/delete?id=5
+        // DELETE: api/archives/delete?userId=5&archiveId=7
         [Route("api/archives/delete")]
         [HttpDelete]
-        public async Task<ActionResult<int>> DeleteArchive(int id)
+        public async Task<ActionResult<int>> DeleteArchive(int userId, int archiveId)
         {
-            // TBD: add auth and make sure user owns archive
-
-            if (_dbUtils.ArchiveExists(id) == false)
+            if (
+                _dbUtils.ArchiveExists(archiveId) == false ||
+                _dbUtils.UserExists(userId) == false
+            )
             {
                 return NotFound();
             }
 
             try
             {
-                var archive = await _context.Archives.FindAsync(id);
+                Archive archive = await _context.Archives.FindAsync(archiveId);
+
+                // TBD: add auth and make sure the user is authorized to delete the archive
+
+                if (archive.UserId != userId)
+                {
+                    return Unauthorized();
+                }
 
                 _context.Archives.Remove(archive);
                 await _context.SaveChangesAsync();
 
-                return id;
+                return archiveId;
             }
             catch (Exception Ex)
             {

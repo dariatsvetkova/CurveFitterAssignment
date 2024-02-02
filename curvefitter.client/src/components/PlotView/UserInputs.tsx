@@ -1,6 +1,6 @@
 import React from 'react';
-import { CurveFitType, DataPointType } from '../models/CurveTypes';
-import { curveFitOptions } from '../utility/constants';
+import { CurveFitType, DataPointType } from '../../models/CurveTypes';
+import { curveFitOptions } from '../../utility/constants';
 
 interface UserInputProps {
     fit: CurveFitType;
