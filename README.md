@@ -1,22 +1,23 @@
 # CurveFitter
 
-![Screenshot 2024-01-24 200826](https://github.com/dariatsvetkova/CurveFitterAssignment/assets/68360696/792b0153-0017-461e-b8fa-6a17e4f0ffcf)
+![image](https://github.com/dariatsvetkova/CurveFitterAssignment/assets/68360696/892ffe0d-14cd-483c-b45d-346c73906e3a)
 
 ## Description
 
-[Client demo](https://www.loom.com/share/3620fddfc8404a5e8ea4cf3958441c11?sid=e1de9eac-0ac2-4bdd-8090-dd85289714db)
+> **Update** 1 Feb 2024: the persistence feature has been added. You can access the original submission [here](https://github.com/dariatsvetkova/CurveFitterAssignment/tree/og-submission) and the [diff](https://github.com/dariatsvetkova/CurveFitterAssignment/pull/1/files) here.
 
 ### The following functionality has been implemented:
 
-* Client app that collects form data for 2D points and fit type, then queries the API and displays a graph with the user's points and approximated data
+* Client app that collects form data for 2D points and fit type, then queries the API and displays a plot with the user's points and approximated data; plots can be saved to archive, viewed and deleted.
 
 * API endpoint that takes form input and returns lists of data points for the approximated curve and the equation for it
+
+* API endpoints to create new users, save the user's plots to the database, get list of all plots and delete a plot
 
 ### Functionality that hasn't been implemented:
 
 Due to the limited timeframe, I had to focus on implementing key features and leave out more time-consuming ones. If given more time, I would do the following:
 
-- Add the persistence functionality described in the assignment (you can find the beginnings of SQLite and the Entity Framework implementation in this codebase, but it is a work in progress and isn't functional so far)
 - Research and implement .NET API best practices, including CORS policy configuration
 - Add automated tests
 - Improve the front-end functionality by using appropriate libraries for handling form inputs and formatting data
