@@ -1,88 +1,113 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using CurveFitter.Server.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Data.Entity;
-using System.Xml;
+using System.Text.Json;
 
 namespace CurveFitter.Server.Controllers
 {
-    [Route("api/archives")]
     [ApiController]
-    public class ArchivesController() : ControllerBase
-    //public class ArchivesController(ArchiveContext context) : ControllerBase
+    public class ArchivesController(DataContext context) : ControllerBase
     {
-        //private readonly ArchiveContext _context = context;
+        private readonly DataContext _context = context;
+        private readonly DbUtils _dbUtils = new DbUtils(context);
 
-        //private bool ArchiveExists(int id)
-        //{
-        //    return _context.archives.any(a => a.id == id);
-        //}
-
-        //private bool UserExists(int id)
-        //{
-        //    return id == 1;
-        //}
-
-        // GET: api/Archives/
+        // GET: api/archives?userId=5
+        [Route("api/archives")]
         [HttpGet]
-        public async Task<ActionResult<string>> GetArchives()
+        public async Task<ActionResult<IEnumerable<Archive>>> GetArchive(int userId)
         {
-            return "Hello World";
+            if (!_dbUtils.UserExists(userId))
+            {
+                return NotFound("User not found");
+            }
+            return await _context.Archives.Where(a => a.UserId == userId).ToListAsync();
         }
 
-        //// GET: api/Archives/5
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<string>> GetArchive(int id)
-        //{
-        //    return id.ToString();
-        //    //Task<ActionResult<IEnumerable<Archive>>>
-        //    //return await _context.Archives.Where(a => a.UserId == id).ToListAsync();
-        //}
+        // POST: api/archives/add
+        [Route("api/archives/add")]
+        [HttpPost]
+        public async Task<ActionResult<ArchiveToSave>> PostArchive([FromBody]ArchiveToSave newArchiveObj)
+        {
+            // Validate inputs
 
-        //// POST: api/Archives
-        //[HttpPost]
-        //public async Task<ActionResult<Archive>> PostArchive(Archive archive)
-        //{
-        //    if (UserExists(archive.UserId) == false)
-        //    {
-        //        return NotFound("User not found");
-        //    }
+            (bool isValid, string errorMessage) = ServerUtils.ValidateArchive(newArchiveObj);
 
-        //    //double[] values = { 1.2, 3.4, 5.6 };
-        //    //byte[] data = new byte[values.Length * sizeof(double)];
-        //    //Buffer.BlockCopy(values, 0, data, 0, data.Length);
+            if (!isValid)
+            {
+                return BadRequest(errorMessage);
+            }
 
-        //    //MyEntity entity = new MyEntity
-        //    //{
-        //    //    Name = "Entity 1",
-        //    //    Values = data
-        //    //};
+            if (_dbUtils.UserExists(newArchiveObj.UserId) == false)
+            {
+                return NotFound("User not found");
+            }
 
-        //    //using (var context = new MyDbContext())
-        //    //{
-        //    //    context.MyEntities.Add(entity);
-        //    //    context.SaveChanges();
-        //    //}
+            // Save archive to the database
 
-        //    _context.Archives.Add(archive);
-        //    await _context.SaveChangesAsync();
+            int uniqueId = ServerUtils.GenerateId();
+            while (_dbUtils.ArchiveExists(uniqueId))
+            {
+                uniqueId = ServerUtils.GenerateId();
+            }
 
-        //    return CreatedAtAction("GetArchive", new { id = archive.Id }, archive);
-        //}
+            Archive newArchive = new Archive
+            {
+                Id = uniqueId,
+                Timestamp = DateTime.Now,
+                FitType = newArchiveObj.FitType,
+                Name = newArchiveObj.Name,
+                UserId = newArchiveObj.UserId,
+                UserDataPoints = newArchiveObj.UserDataPoints,
+                FitDataPoints = newArchiveObj.FitDataPoints,
+                Equation = newArchiveObj.Equation
+            };
 
-        //// DELETE: api/Archives/5
-        //[HttpDelete("{id}")]
-        //public async Task<ActionResult<Archive>> DeleteArchive(int id)
-        //{
-        //    if (ArchiveExists(id) == false)
-        //    {
-        //        return NotFound();
-        //    }
-        //    var archive = await _context.Archives.FindAsync(id);
+            try
+            {
+                _context.Archives.Add(newArchive);
+                await _context.SaveChangesAsync();
 
-        //    _context.Archives.Remove(archive);
-        //    await _context.SaveChangesAsync();
+                return new JsonResult(newArchive);
+            }
+            catch (Exception Ex)
+            {
+                return BadRequest(new { message = Ex.InnerException?.Message ?? "Unhandled exception" });
+            }
+        }
 
-        //    return archive;
-        //}
+        // DELETE: api/archives/delete?userId=5&archiveId=7
+        [Route("api/archives/delete")]
+        [HttpDelete]
+        public async Task<ActionResult<int>> DeleteArchive(int userId, int archiveId)
+        {
+            if (
+                _dbUtils.ArchiveExists(archiveId) == false ||
+                _dbUtils.UserExists(userId) == false
+            )
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                Archive archive = await _context.Archives.FindAsync(archiveId);
+
+                // TBD: add auth and make sure the user is authorized to delete the archive
+
+                if (archive.UserId != userId)
+                {
+                    return Unauthorized();
+                }
+
+                _context.Archives.Remove(archive);
+                await _context.SaveChangesAsync();
+
+                return archiveId;
+            }
+            catch (Exception Ex)
+            {
+                return BadRequest(new { message = Ex.InnerException?.Message ?? "Unhandled exception" });
+            }
+        }
     }
 }

@@ -17,12 +17,11 @@ function formatData(data: CurveType): CurveType {
 }
 
 export async function getCurveData(
-    path: string,
     params: CurveRequestParamsType,
 ): Promise<CurveType | null> {
     const fetchUrl = encodeURI(
         "https://localhost:7228/"
-        + path
+        + 'api/curvefit'
         + `?userPoints=${formatPoints(params.userPoints)}&fitType=${encodeURIComponent(params.fitType)}`
     )
 

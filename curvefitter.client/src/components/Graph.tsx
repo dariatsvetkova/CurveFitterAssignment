@@ -1,4 +1,3 @@
-import React from 'react';
 import {
     Scatter,
     XAxis,
@@ -17,7 +16,7 @@ interface CurrentPlotProps {
     fitDataPoints?: DataPointType[];
 }
 
-export default function CurrentPlot({
+export default function Graph({
     userDataPoints,
     fitDataPoints = [],
 }: CurrentPlotProps) {

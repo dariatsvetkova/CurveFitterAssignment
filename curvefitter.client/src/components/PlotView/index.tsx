@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { CurrentPlot, Equation, UserInputs } from '.';
 import {
     CurveFitType,
     DataPointType,
     CurveServerResponseType,
     CurveRequestParamsType,
-} from '../models/CurveTypes';
-import { curveFitOptions, defaultServerResponse } from '../utility/constants';
-import { getCurveData } from '../dbUtility/getData';
-import { validateInputs } from '../utility/validateInputs';
+} from '../../models/CurveTypes';
+import {
+    curveFitOptions,
+    defaultCurveServerResponse,
+} from '../../utility/constants';
+import { getCurveData } from '../../dbUtility/getCurveData';
+import { validateInputs } from '../../utility/validateInputs';
+import SavePlot from './SavePlot';
+import Graph from '../Graph';
+import UserInputs from './UserInputs';
+import Equation from '../Equation';
 
 export default function PlotView() {
     // User input state
@@ -57,7 +63,7 @@ export default function PlotView() {
     // Server request state
 
     const [response, setResponse] =
-        useState<CurveServerResponseType>(defaultServerResponse);
+        useState<CurveServerResponseType>(defaultCurveServerResponse);
 
     const handleSumbit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -76,7 +82,7 @@ export default function PlotView() {
 
         setResponse({ ...response, loading: true });
 
-        getCurveData('api/curvefit', params)
+        getCurveData(params)
             .then((data) => {
                 data && setResponse({
                     data: data,
@@ -97,30 +103,36 @@ export default function PlotView() {
     }
 
     return (
-        <div className="plotAreaContainer">
-            <UserInputs
-                fit={fit}
-                dataPoints={dataPoints}
-                handleFitChange={handleFitChange}
-                handleDataPointChange={handleDataPointChange}
-                handleDataPointsAmount={handleDataPointsAmount}
-                handleSubmit={handleSumbit}
-            />
-            {response.error && (
-                <p>{response.message}</p>
-            )}
-            {response.loading && (
-                <p>Loading...</p>
-            )}
-            {response.data?.UserDataPoints && (
-                <div>
-                    <Equation Equation={response.data.Equation} />
-                    <CurrentPlot
-                        userDataPoints={response.data?.UserDataPoints}
-                        fitDataPoints={response.data?.FitDataPoints}
-                    />
-                </div>
-            )}
-        </div>
+        <>
+            <h2>New Plot</h2>
+            <div className="plotAreaContainer">
+                <UserInputs
+                    fit={fit}
+                    dataPoints={dataPoints}
+                    handleFitChange={handleFitChange}
+                    handleDataPointChange={handleDataPointChange}
+                    handleDataPointsAmount={handleDataPointsAmount}
+                    handleSubmit={handleSumbit}
+                    loading={response.loading}
+                />
+                {response.error && (
+                    <p className="error">{response.message}</p>
+                )}
+                {response.loading && (
+                    <p>Loading...</p>
+                )}
+                {response.data?.UserDataPoints && (
+                    <div>
+                        <Equation Equation={response.data.Equation} />
+                        <Graph
+                            userDataPoints={response.data?.UserDataPoints}
+                            fitDataPoints={response.data?.FitDataPoints}
+                        />
+
+                        <SavePlot data={response.data} fitType={fit.value} />
+                    </div>
+                )}
+            </div>
+        </>
     )
 }

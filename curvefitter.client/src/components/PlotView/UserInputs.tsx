@@ -1,6 +1,6 @@
 import React from 'react';
-import { CurveFitType, DataPointType } from '../models/CurveTypes';
-import { curveFitOptions } from '../utility/constants';
+import { CurveFitType, DataPointType } from '../../models/CurveTypes';
+import { curveFitOptions } from '../../utility/constants';
 
 interface UserInputProps {
     fit: CurveFitType;
@@ -12,6 +12,7 @@ interface UserInputProps {
     ) => void;
     handleDataPointsAmount: (i?: number) => void;
     handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+    loading: boolean;
 }
 
 export default function UserInputs({
@@ -21,25 +22,31 @@ export default function UserInputs({
     handleDataPointChange,
     handleDataPointsAmount,
     handleSubmit,
+    loading,
 }: UserInputProps) {
     return (
         <form onSubmit={(e) => handleSubmit(e)}>
-            <label htmlFor="curveFitType">Select desired curve fit type:</label>
-            <select
-                id="curveFitType"
-                name="curveFitType"
-                onChange={(e) => handleFitChange(e)}
-                required
-            >
-                <option value="" disabled>
-                    Select a curve fit type
-                </option>
-                {curveFitOptions.map((option: CurveFitType) => (
-                    <option value={option.value} key={option.name}>
-                        {option.name}
+            <div className="inputContainer">
+                <label htmlFor="curveFitType" className="formLabel">
+                    Select desired curve fit type:
+                </label>
+                <select
+                    id="curveFitType"
+                    name="curveFitType"
+                    onChange={(e) => handleFitChange(e)}
+                    required
+                >
+                    <option value="" disabled>
+                        Select a curve fit type
                     </option>
-                ))}
-            </select>
+                    {curveFitOptions.map((option: CurveFitType) => (
+                        <option value={option.value} key={option.name}>
+                            {option.name}
+                        </option>
+                    ))}
+                </select>
+            </div>
+
             {dataPoints.map((point, index) => (
                 <fieldset key={`dataPoint-${index}`} className="pointInput">
                     <legend>
@@ -83,11 +90,17 @@ export default function UserInputs({
                 <button
                     type="button"
                     onClick={() => handleDataPointsAmount()}
+                    disabled={loading}
                 >
                     Add data point
                 </button>
 
-                <button type="submit">Submit</button>
+                <button
+                    type="submit"
+                    disabled={loading}
+                >
+                    Submit
+                </button>
             </div>
         </form>
     )

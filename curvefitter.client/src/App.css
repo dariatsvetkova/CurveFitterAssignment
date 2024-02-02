@@ -10,9 +10,24 @@ form {
     text-align: left;
 }
 
+.inputContainer {
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.formLabel {
+    margin-right: 1rem;
+}
+
 select {
-    margin-left: 1rem;
     font-size: 1rem;
+}
+
+fieldset legend {
+    padding: 0;
 }
 
 .pointInput {
@@ -25,15 +40,15 @@ select {
     align-items: center;
 }
 
-.pointInput label,
-.pointInput input {
-    margin: 0 0.5rem;
+.plotAreaContainer,
+.archiveAreaContainer {
+    min-height: 50vh;
+    margin: 1rem auto;
+    position: relative;
 }
-
 
 @media (min-width: 1024px) {
     .plotAreaContainer {
-        margin: 1rem auto;
         display: grid;
         grid-template-columns: 1fr 1fr;
         justify-content: center;
@@ -51,4 +66,48 @@ select {
 
 .formButtonContainer button {
     min-width: 10rem;
+    margin-left: 1rem;
+}
+
+..formButtonContainer button:last-child {
+    margin-left: 0;
+}
+
+
+.error {
+    color: red;
+}
+
+.archiveListContainer {
+    margin: 2rem auto;
+    margin-top: 4rem;
+}
+
+.archiveList {
+    list-style: none;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+}
+
+.archiveCard {
+    flex: 0 0 250px;
+    margin: 1rem;
+    padding: 1rem;
+    border: 1px solid #808080;
+    border-radius: 5px;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.activeCard {
+    border: 2px solid #000;
+}
+
+.closeButton {
+    position: absolute;
+    top: -4rem;
+    right: 0;
 }
