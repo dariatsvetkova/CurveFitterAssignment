@@ -4,8 +4,6 @@
 
 ## Description
 
-> **Update** 1 Feb 2024: the persistence feature has been added. You can access the original submission [here](https://github.com/dariatsvetkova/CurveFitterAssignment/tree/og-submission) and the [diff](https://github.com/dariatsvetkova/CurveFitterAssignment/pull/1/files) here.
-
 ### The following functionality has been implemented:
 
 * Client app that collects form data for 2D points and fit type, then queries the API and displays a plot with the user's points and approximated data; plots can be saved to archive, viewed and deleted.
